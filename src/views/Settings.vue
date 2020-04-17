@@ -61,7 +61,11 @@ export default {
         method: () => {}
       }
 
-      if (this.owner.bankAccountNumber === '' ||
+      if (this.owner.bank.bankName === '' ||
+          this.owner.bank.branchName === '' ||
+          this.owner.bank.accountType === '' ||
+          this.owner.bank.accountNumber === '' ||
+          this.owner.bank.accountName === '' ||
           this.owner.shopName === '' ||
           this.owner.shopComment === '') {
         alert("必要項目を入力してください。")
@@ -77,9 +81,11 @@ export default {
         .doc(this.uid)
         .update({
           shopIconPhoto: this.owner.shopIconPhoto,
+          shopHeaderPhoto: this.owner.shopHeaderPhoto,
           shopName: this.owner.shopName,
           shopComment: this.owner.shopComment,
-          bankAccountNumber: this.owner.bankAccountNumber
+          bank: this.owner.bank,
+          shopPlanComments: this.owner.shopPlanComments
         })
 
       this.headerContent.rightAction = {

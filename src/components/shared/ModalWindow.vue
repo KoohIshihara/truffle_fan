@@ -9,6 +9,12 @@
         ModuleModalCompleteSubscription(
           v-if="modalContentId === 'completeSubscription'"
           @closeModal="() => { $emit('closeModal') }")
+        ModuleModalEditFanUser(
+          v-if="modalContentId === 'editFanUser'"
+          @closeModal="() => { $emit('closeModal') }")
+        ModuleModalCompleteVerification(
+          v-if="modalContentId === 'completeVerification'"
+          @closeModal="() => { $emit('closeModal') }")
 </template>
 
 <style lang="scss" scoped>
@@ -38,11 +44,16 @@
 <script>
 import ModuleRegisterCard from '@/components/module/ModuleRegisterCard'
 import ModuleModalCompleteSubscription from '@/components/module/ModuleModalCompleteSubscription'
+import ModuleModalEditFanUser from '@/components/module/ModuleModalEditFanUser'
+
+import ModuleModalCompleteVerification from '@/components/module/ModuleModalCompleteVerification'
 
 export default {
   components: {
     ModuleRegisterCard,
-    ModuleModalCompleteSubscription
+    ModuleModalCompleteSubscription,
+    ModuleModalEditFanUser,
+    ModuleModalCompleteVerification
   },
   props: {
     showModal: {

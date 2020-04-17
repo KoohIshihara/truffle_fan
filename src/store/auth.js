@@ -11,7 +11,8 @@ export const state = () => ({
   isSigningOut: false,
   uid: null,
   subscriptionEnder: null,
-  isAnonymous: null
+  isAnonymous: null,
+  email: 'ko.ishihara@chatcenter.io' // null
 })
 
 export const mutations = {
@@ -51,6 +52,9 @@ export const mutations = {
   },
   updateSubscriptionEnder(state, value) {
     state.subscriptionEnder = value
+  },
+  updateEmail(state, email) {
+    state.email = email
   }
 }
 
@@ -93,5 +97,8 @@ export const actions = {
       commit('updateAuthStatus', user)
       resolve(user)
     })
+  },
+  updateEmail({ commit }, email) {
+    commit('updateEmail', email)
   }
 }

@@ -1,5 +1,7 @@
 <template lang="pug">
   div.wrap-module-register-card.px18.py24
+    div.f.fc.mb16
+      h4 {{planLabel}}
     div.wrap-email
       v-text-field(label="email"
         placeholder="メールアドレスを入力"
@@ -69,10 +71,30 @@ export default {
   data () {
     return {
       showModal: true,
+      plan: 'FIVE_THOUSAND_YEN_PLAN',
+      planLabel: '',
       email: '',
       emailRules: [ v => /.+@.+/.test(v) || 'Invalid Email address' ],
       card: null,
       isSaving: false
+    }
+  },
+  created () {
+    var moduleShop = this.$parent.$parent.$parent.$refs.module_shop
+    var selectedPlan = moduleShop.selectedPlan
+    switch (selectedPlan) {
+      case 'FIVE_THOUSAND_YEN_PLAN':
+        this.plan = 'FIVE_THOUSAND_YEN_PLAN'
+        this.planLabel = '月額5,000円プラン'
+        break
+      case 'TEN_THOUSAND_YEN_PLAN':
+        this.plan = 'TEN_THOUSAND_YEN_PLAN'
+        this.planLabel = '月額10,000円プラン'
+        break
+      case 'TWENTY_THOUSAND_YEN_PLAN':
+        this.plan = 'TWENTY_THOUSAND_YEN_PLAN'
+        this.planLabel = '月額20,000円プラン'
+        break
     }
   },
   mounted () {
@@ -94,7 +116,7 @@ export default {
     form.addEventListener('submit', this.formSubmit)
   },
   methods: {
-    ...mapActionsAuth(['signOut']),
+    ...mapActionsAuth(['signOut', 'updateEmail']),
     cardValidate (event) {
       var displayError = document.getElementById('card-errors')
       if (event.error) {
@@ -115,6 +137,7 @@ export default {
         if (result.error) {
           var errorElement = document.getElementById('card-errors')
           errorElement.textContent = result.error.message
+          return 'error'
         } else {
           // トークンをサーバに送信
           // this.stripeTokenHandler(result.token)
@@ -122,23 +145,30 @@ export default {
         }
       })
 
+      if (token === 'error') {
+        alert('クレジットカードが認証できませんでした。')
+        this.isSaving = false
+      }
+
       console.log('params', {
         email: this.email,
         token: token.id,
         uid: this.uid,
-        ownerId: this.$route.params.ownerId
+        ownerId: this.$route.params.ownerId,
+        plan: this.plan
       })
 
       var params = {
         email: this.email,
         token: token.id,
         uid: this.uid,
-        ownerId: this.$route.params.ownerId
+        ownerId: this.$route.params.ownerId,
+        plan: this.plan
       }
       if (this.$route.params.inviterId) params.inviterId = this.$route.params.inviterId
       const response = await fetch(`${api}/createSubscription`, {
         method: 'POST',
-        mode: 'cors',
+        // mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
@@ -147,9 +177,11 @@ export default {
       })
       await response.json()
 
+      this.updateEmail(this.email)
+
       alert('登録が完了しました！')
 
-      this.$emit('openModalWindow', 'completeSubscription')
+      this.$emit('openModalWindow', 'editFanUser')
 
       this.isSaving = false
     }

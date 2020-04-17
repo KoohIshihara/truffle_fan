@@ -9,7 +9,8 @@
     div.wrap-shop
       ModuleShop(v-if="owner" :owner="owner"
         @openModalWindow="openModalWindow"
-        @closeModalWindow="closeModalWindow")
+        @closeModalWindow="closeModalWindow"
+        ref="module_shop")
 </template>
 
 <style lang="scss" scoped>
@@ -39,10 +40,10 @@ export default {
     return {
       owner: null,
       headerContent: {
-        label: ''
+        label: 'Truffle.fan'
       },
-      modalWindowContentId: "",
-      showModalWindow: false,
+      modalWindowContentId: '',
+      showModalWindow: false
     }
   },
   computed: {
@@ -62,7 +63,7 @@ export default {
     async onLoggedIn () {
       this.owner = await db.collection('OWNERS')
         .doc(this.$route.params.ownerId).get().then(d => { return d.data() })
-      this.headerContent.label = this.owner.shopName
+      // this.headerContent.label = this.owner.shopName
     },
     openModalWindow (id) {
       this.modalWindowContentId = id

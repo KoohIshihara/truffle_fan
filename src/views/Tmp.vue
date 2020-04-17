@@ -1,13 +1,13 @@
 <template lang="pug">
   Auth(@loggedIn="onLoggedIn" @loginFailed="onFailedAuthentication")
     Header(:content="headerContent")
-    div.wrap-shop
+    div.wrap-fan-user
       ModuleTmp
 
 </template>
 
 <style lang="scss" scoped>
-.wrap-shop {
+.wrap-fan-user {
   width: 100%;
   min-height: 100vh;
 }

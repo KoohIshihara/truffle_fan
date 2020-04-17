@@ -1,12 +1,13 @@
 <template lang="pug">
   div.wrap-module-complete-subscription.px18.py24
     div.f.fc.mb12
-      span ご購入が完了しました！
+      span 認証が完了しました！
     div.wrap-share.f.fc
       div(v-clipboard:copy="copyMessage"
         v-clipboard:success="onCopy").share-button.f.fm.px12.py8
         v-icon(color="#fff" size="18px").mr6 share
         span.line-clamp-1 友達にもシェアする
+
 </template>
 
 <style lang="scss" scoped>
@@ -38,7 +39,7 @@ export default {
   computed: {
     ...mapStateAuth(['uid']),
     copyMessage: function () {
-      return `${location.origin}/${this.$route.params.ownerId}/${this.uid}`
+      return `${location.origin}/${this.$route.params.ownerId}/${this.$route.params.fanUserId}`
     }
   },
   data () {

@@ -3,7 +3,9 @@
     div.wrap-sign-ui.f.fh
       div.sign-ui
         div.f.fc.mb14
-          span.welcome Welcome to Restaurant Subscription
+          span.welcome Welcome to Truffle.fan
+          //- div
+            img(src="/img/default-icons/default-header.png")
         SignIn
 </template>
 
@@ -50,17 +52,19 @@ export default {
   mounted () {
     setTimeout(() => {
       if (location.pathname.split('/')[1] === 'sign-up') {
-        document.getElementsByClassName('firebaseui-title')[0].innerText = 'Sign Up with Email'
+        if (document.getElementsByClassName('firebaseui-title')[0]) {
+          document.getElementsByClassName('firebaseui-title')[0].innerText = 'Sign Up with Email'
+        }
       }
-    }, 100)
+    }, 1000)
   },
   methods: {
     onFailedAuthentication () {
-      console.log("not authed")
+      console.log('not authed')
     },
     async onLoggedIn () {
       if (this.uid && !this.isAnonymous) {
-        var userDoc = await db.collection('users').doc(this.uid).get()
+        var userDoc = await db.collection('OWNERS').doc(this.uid).get()
 
         if (!userDoc.exists) {
           var user = await firebase.auth().currentUser
@@ -69,10 +73,31 @@ export default {
             uid: user.uid,
             lastSignInTime: user.metadata.lastSignInTime,
             createdAt: user.metadata.creationTime,
-            bankAccountNumber: "",
-            shopName: "",
-            shopComment: "",
-            shopIconPhoto: "https://firebasestorage.googleapis.com/v0/b/ghost-rights.appspot.com/o/util%2Fghost_rights_logo.png?alt=media&token=6ae98b77-6d5e-4980-83d9-4681b4b05cc8"
+            bank: {
+              bankName: '',
+              branchName: '',
+              accountType: '',
+              accountNumber: '',
+              accountName: ''
+            },
+            shopName: '',
+            shopComment: '',
+            shopIconPhoto: '/img/default-icons/default-icon.png',
+            shopHeaderPhoto: '/img/default-icons/default-header.png',
+            shopPlanComments: [
+              {
+                id: 'FIVE_THOUSAND_YEN_PLAN',
+                value: ''
+              },
+              {
+                id: 'TEN_THOUSAND_YEN_PLAN',
+                value: ''
+              },
+              {
+                id: 'TWENTY_THOUSAND_YEN_PLAN',
+                value: ''
+              }
+            ]
           }
 
           await db.collection("OWNERS")

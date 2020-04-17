@@ -1,23 +1,47 @@
 <template lang="pug">
   div.wrap-module-home
-    div.wrap-profile-img.f.fc.mt30.mb26
-      div.wrap-img
+    div.wrap-profile-img.f.fh.mb20
+      div.wrap-icon-img
         img(:src="owner.shopIconPhoto")
-    div.wrap-share.f.fc.mb20
+      div.wrap-header-img
+        img(:src="owner.shopHeaderPhoto")
+    div.wrap-share.f.fc.py14
       div(v-clipboard:copy="copyMessage"
         v-clipboard:success="onCopy").share-button.f.fm.px12.py8
         v-icon(color="#fff" size="18px").mr6 share
         span.line-clamp-1 シェア
-    div.wrap-profile-texts.px12.py20
+    div.wrap-profile-texts.px12.py20.mb20
       div.wrap-text-item.mb12
         span.label.mb4 お店の名前:
         span {{owner.shopName}}
       div.wrap-text-item.mb12
         span.label.mb4 コメント:
         span {{owner.shopComment}}
-      div.wrap-text-item
+      div(v-if="owner.shopPlanComments[0].value").wrap-text-item.mb12
+        span.label.mb4 月額5,000円プラン:
+        span {{owner.shopPlanComments[0].value + ' '}}
+      div(v-if="owner.shopPlanComments[1].value").wrap-text-item.mb12
+        span.label.mb4 月額10,000円プラン:
+        span {{owner.shopPlanComments[1].value + ' '}}
+      div(v-if="owner.shopPlanComments[2].value").wrap-text-item.mb12
+        span.label.mb4 月額20,000円プラン:
+        span {{owner.shopPlanComments[2].value + ' '}}
+      div.wrap-text-item.mb12
+        span.label.mb4 銀行名:
+        span {{owner.bank.bankName}}
+      div.wrap-text-item.mb12
+        span.label.mb4 支店名:
+        span {{owner.bank.branchName}}
+      div.wrap-text-item.mb12
+        span.label.mb4 口座種別:
+        span {{owner.bank.accountType}}
+      div.wrap-text-item.mb12
         span.label.mb4 口座番号:
-        span {{owner.bankAccountNumber}}
+        span {{owner.bank.accountNumber}}
+      div.wrap-text-item.mb12
+        span.label.mb4 口座名義（カナ）:
+        span {{owner.bank.accountName}}
+    
     div.wrap-sign-out.f.fc
       span(@click="logout") ログアウト
 </template>
@@ -25,23 +49,41 @@
 <style lang="scss" scoped>
 .wrap-module-home {
   position: relative;
-  width: 93%;
-  max-width: 820px;
   min-height: 100vh;
-  margin: 0 auto;
   padding: 48px 0;
+  background: #fff;
   .wrap-profile-img {
-    .wrap-img {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    .wrap-icon-img {
+      position: relative;
+      z-index: 100;
       width: 120px;
       height: 120px;
       border-radius: 50%;
       overflow: hidden;
+      background: #fff;
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
     }
+    .wrap-header-img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+  .wrap-title {
   }
   .wrap-share {
     .share-button {
@@ -56,6 +98,9 @@
   .wrap-profile-texts {
     background: #fff;
     border-radius: 3px;
+    width: 93%;
+    max-width: 820px;
+    margin: 0 auto;
     span {
       display: block;
     }
@@ -97,7 +142,7 @@ export default {
     return {
       showModal: true,
       headerContent: {
-        label: "home",
+        label: "ホーム",
         rightAction: {
           icon: "add",
           color: "#1967d2",

@@ -22,7 +22,7 @@
   height: 48px;
   background: #fff;
   border-bottom: solid rgba(0, 0, 0, 0.4) 0.5px;
-  z-index: 100;
+  z-index: 200;
   .header-content {
     position: relative;
     width: 93%;

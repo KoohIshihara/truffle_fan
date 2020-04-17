@@ -24,6 +24,18 @@ export default new Router({
         import('@/views/Settings')
     },
     {
+      path: '/fan_users/:ownerId/:fanUserId',
+      name: 'fan_users',
+      component: () =>
+        import('@/views/FanUser')
+    },
+    {
+      path: '/verify_email/:ownerId/:fanUserId',
+      name: 'verify_email',
+      component: () =>
+        import('@/views/FanUser')
+    },
+    {
       path: '/sign-in',
       name: 'sign-in',
       props: true,

@@ -50,10 +50,15 @@ export default {
     async onLoggedIn () {
       this.owner = await db.collection('OWNERS')
         .doc(this.uid).get().then(d => { return d.data() })
-      if (this.owner.bankAccountNumber === '' ||
+      
+      if (this.owner.bank.bankName === '' ||
+          this.owner.bank.branchName === '' ||
+          this.owner.bank.accountType === '' ||
+          this.owner.bank.accountNumber === '' ||
+          this.owner.bank.accountName === '' ||
           this.owner.shopName === '' ||
           this.owner.shopComment === '') {
-        alert("Resutaurant Subscriptionへようこそ！まずはお店の情報を入力しましょう！")
+        alert('Truffle.fanへようこそ！まずはお店の情報を入力しましょう！')
         this.$router.push('/settings')
       }
 
