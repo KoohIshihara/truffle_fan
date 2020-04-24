@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     onFailedAuthentication () {
-      this.$router.push('/sign-in')
+      // this.$router.push('/sign-in')
     },
     onLoggedIn () {
     

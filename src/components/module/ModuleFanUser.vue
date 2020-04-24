@@ -129,8 +129,12 @@ export default {
       .doc('email')
       .get()
       .then(d => {
-        var data = d.data()
-        return data.body
+        if (d.exists) {
+          var data = d.data()
+          return data.body
+        } else {
+          return 'no email'
+        }
       })
     this.phoneNumber = await db.collection('FAN_USERS')
       .doc(this.user.uid)
@@ -138,8 +142,12 @@ export default {
       .doc('phone_number')
       .get()
       .then(d => {
-        var data = d.data()
-        return data.body
+        if (d.exists) {
+          var data = d.data()
+          return data.body
+        } else {
+          return 'no phone number'
+        }
       })
   },
   methods: {

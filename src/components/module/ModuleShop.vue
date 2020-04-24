@@ -8,25 +8,29 @@
     div.wrap-shop-content
       div.wrap-title.f.fc.mb8
         span {{owner.shopName}}
-      div.wrap-comment.f.fc.mb4
+      div.wrap-comment.f.fc.mb14
         span {{owner.shopComment}}
-      div.wrap-price-list
-        v-radio-group(v-model="selectedPlan")
-          div(v-for="(price, index) in prices").mb6
-            v-radio(
-              :key="price.plan"
-              :label="price.label"
-              :value="price.plan")
-            div
-              span.plan-detail {{owner.shopPlanComments[index].value}}
+      div.wrap-plan.f.fc
+        div(v-if="owner.planType === 'unit'").mb12
+          v-radio-group(v-model="selectedPlan")
+            div(v-for="(price, index) in prices").mb6
+              v-radio(
+                :key="price.plan"
+                :label="price.label"
+                :value="price.plan")
+              div.plan-detail.mb2
+                span.plan-detail.pl32 {{price.detail}}
+        div(v-if="owner.planType === 'fanClub'").mb20
+          div.f.fc.mb8
+            span.bold {{`${priceLabel}`}}
+          span {{`${owner.fanClubDetail.content}`}}
       div.wrap-button.f.fc.mb30
         span(@click="onSubscription").px12.py8 サブスクする
       div.wrap-share.f.fc
         div(v-clipboard:copy="copyMessage"
           v-clipboard:success="onCopy").share-button.f.fm.px12.py8
           v-icon(color="#1967d2" size="18px").mr6 share
-          span.line-clamp-1 友達に教える 
-
+          span.line-clamp-1 友達に教える
 </template>
 
 <style lang="scss" scoped>
@@ -71,9 +75,11 @@
     max-width: 820px;
     margin: 0 auto;
     .wrap-title {
+      width: 80%;
+      margin: 0 auto;
       span {
-        width: 80%;
         font-size: 16px;
+        font-weight: bold;
         // text-align: center;
       }
     }
@@ -93,6 +99,14 @@
         //   border: 15px solid transparent;
         //   border-bottom: 15px solid #fff;
         // }
+      }
+    }
+    .wrap-plan {
+      width: 80%;
+      margin: 0 auto;
+      .plan-detail {
+        font-size: 14px;
+        color: #999;
       }
     }
     .wrap-price-list {
@@ -143,18 +157,22 @@ export default {
     return {
       showModal: true,
       selectedPlan: 'FIVE_THOUSAND_YEN_PLAN',
+      priceLabel: '',
       prices: [
         {
-          label: '月額5,000円',
-          plan: 'FIVE_THOUSAND_YEN_PLAN'
+          label: '月額5,000円(税抜)',
+          plan: 'FIVE_THOUSAND_YEN_PLAN',
+          detail: '1,000円割引券を6枚分(1,000円お得)'
         },
         {
-          label: '月額10,000円',
-          plan: 'TEN_THOUSAND_YEN_PLAN'
+          label: '月額10,000円(税抜)',
+          plan: 'TEN_THOUSAND_YEN_PLAN',
+          detail: '1,000円割引券を12枚分(2,000円お得)'
         },
         {
-          label: '月額20,000円',
-          plan: 'TWENTY_THOUSAND_YEN_PLAN'
+          label: '月額20,000円(税抜)',
+          plan: 'TWENTY_THOUSAND_YEN_PLAN',
+          detail: '1,000円割引券を24枚分(4,000円お得)'
         }
       ]
     }
@@ -169,6 +187,22 @@ export default {
     ...mapStateAuth(['uid']),
     copyMessage: function () {
       return `${location.origin}/${this.owner.uid}/${this.uid}`
+    }
+  },
+  created () {
+    if (this.owner.planType === 'fanClub') {
+      this.selectedPlan = this.owner.fanClubDetail.plan
+      switch (this.owner.fanClubDetail.plan) {
+        case 'FIVE_THOUSAND_YEN_PLAN':
+          this.priceLabel = '月額5,000円'
+          break
+        case 'TEN_THOUSAND_YEN_PLAN':
+          this.priceLabel = '月額10,000円'
+          break
+        case 'TWENTY_THOUSAND_YEN_PLAN':
+          this.priceLabel = '月額20,000円'
+          break
+      }
     }
   },
   methods: {

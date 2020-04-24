@@ -1,13 +1,13 @@
 <template lang="pug">
   Auth(@loggedIn="onLoggedIn" @loginFailed="onFailedAuthentication")
     Header(:content="headerContent")
-    div.wrap-home
-      ModuleHome(v-if="owner && owner.planType " :owner="owner")
+    div.wrap-settings-profile.f.fh
+      ModuleSettingsBankInfo(v-if="owner" :owner="owner")
       v-progress-circular(v-else color="primary" indeterminate)
 </template>
 
 <style lang="scss" scoped>
-.wrap-home {
+.wrap-settings-profile {
   width: 100%;
   min-height: 100vh;
 }
@@ -19,21 +19,28 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapState: mapStateAuth, mapActions: mapActionsAuth } = createNamespacedHelpers('auth')
 import Auth from '@/components/auth'
 import Header from '@/components/shared/Header.vue'
-import ModuleHome from '@/components/module/ModuleHome'
+import ModuleSettingsBankInfo from '@/components/module/ModuleSettingsBankInfo'
 
 export default {
   components: {
     Auth,
     Header,
-    ModuleHome
+    ModuleSettingsBankInfo
   },
   data () {
     return {
       owner: null,
       headerContent: {
-        label: '',
+        label: '口座情報',
+        leftAction: {
+          icon: 'keyboard_arrow_left',
+          color: '#1967d2',
+          method: () => {
+            this.$router.go(-1)
+          }
+        },
         rightAction: {
-          icon: 'settings',
+          label: '保存',
           color: '#1967d2',
           method: this.onHeaderRight
         }
@@ -49,29 +56,44 @@ export default {
     },
     async onLoggedIn () {
       this.owner = await db.collection('OWNERS')
-        .doc(this.uid).get().then(d => { return d.data() })
-      
-      if (!this.owner.planType) {
-        this.$router.push('/settings/plan_type')
-        return
+        .doc(this.uid)
+        .get()
+        .then(d => { return d.data() })
+    },
+    async onHeaderRight () {
+      this.headerContent.rightAction = {
+        label: '保存',
+        color: '#999',
+        method: () => {}
       }
 
       if (this.owner.bank.bankName === '' ||
           this.owner.bank.branchName === '' ||
           this.owner.bank.accountType === '' ||
           this.owner.bank.accountNumber === '' ||
-          this.owner.bank.accountName === '' ||
-          this.owner.shopName === '' ||
-          this.owner.shopComment === '') {
-        alert('お店の情報を入力しましょう。')
-        this.$router.push('/settings/profile')
-        return
+          this.owner.bank.accountName === '') {
+        alert("必要項目を入力してください。")
+        this.headerContent.rightAction = {
+          label: '保存',
+          color: '#1967d2',
+          method: this.onHeaderRight
+        }
+        return true
+      }
+      
+      await db.collection("OWNERS")
+        .doc(this.uid)
+        .update({
+          bank: this.owner.bank
+        })
+
+      this.headerContent.rightAction = {
+        label: '保存',
+        color: '#1967d2',
+        method: this.onHeaderRight
       }
 
-      this.headerContent.label = this.owner.shopName
-    },
-    onHeaderRight () {
-      this.$router.push('/settings')
+      this.$router.push("/home")
     }
   }
 }

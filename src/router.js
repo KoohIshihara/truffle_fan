@@ -18,10 +18,28 @@ export default new Router({
         import('@/views/Home')
     },
     {
-      path: '/settings',
+      path: '/settings/',
       name: 'settings',
       component: () =>
         import('@/views/Settings')
+    },
+    {
+      path: '/settings/profile',
+      name: 'settings_profile',
+      component: () =>
+        import('@/views/SettingsProfile')
+    },
+    {
+      path: '/settings/bank_info',
+      name: 'bank_info',
+      component: () =>
+        import('@/views/SettingsBankInfo')
+    },
+    {
+      path: '/settings/plan_type',
+      name: 'settings_plan_type',
+      component: () =>
+        import('@/views/SettingsPlanType')
     },
     {
       path: '/fan_users/:ownerId/:fanUserId',

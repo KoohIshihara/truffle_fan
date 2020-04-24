@@ -84,20 +84,21 @@ export default {
             shopComment: '',
             shopIconPhoto: '/img/default-icons/default-icon.png',
             shopHeaderPhoto: '/img/default-icons/default-header.png',
-            shopPlanComments: [
-              {
-                id: 'FIVE_THOUSAND_YEN_PLAN',
-                value: ''
-              },
-              {
-                id: 'TEN_THOUSAND_YEN_PLAN',
-                value: ''
-              },
-              {
-                id: 'TWENTY_THOUSAND_YEN_PLAN',
-                value: ''
-              }
-            ]
+            // shopPlanComments: [
+            //   {
+            //     id: 'FIVE_THOUSAND_YEN_PLAN',
+            //     value: ''
+            //   },
+            //   {
+            //     id: 'TEN_THOUSAND_YEN_PLAN',
+            //     value: ''
+            //   },
+            //   {
+            //     id: 'TWENTY_THOUSAND_YEN_PLAN',
+            //     value: ''
+            //   }
+            // ]
+            // planType: ''
           }
 
           await db.collection("OWNERS")

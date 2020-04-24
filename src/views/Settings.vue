@@ -1,16 +1,15 @@
 <template lang="pug">
   Auth(@loggedIn="onLoggedIn" @loginFailed="onFailedAuthentication")
     Header(:content="headerContent")
-    div.wrap-home.f.fh
-      ModuleSettings(v-if="owner" :owner="owner")
-      v-progress-circular(v-else color="primary" indeterminate)
-
+    div.wrap-settings
+      ModuleSettings
 </template>
 
 <style lang="scss" scoped>
-.wrap-home {
+.wrap-settings {
   width: 100%;
   min-height: 100vh;
+  padding-top: 48px;
 }
 </style>
 
@@ -33,10 +32,12 @@ export default {
       owner: null,
       headerContent: {
         label: '設定',
-        rightAction: {
-          label: '保存',
+        leftAction: {
+          icon: 'keyboard_arrow_left',
           color: '#1967d2',
-          method: this.onHeaderRight
+          method: () => {
+            this.$router.push("/home")
+          }
         }
       }
     }
@@ -48,54 +49,11 @@ export default {
     onFailedAuthentication () {
       this.$router.push('/sign-in')
     },
-    async onLoggedIn () {
-      this.owner = await db.collection('OWNERS')
-        .doc(this.uid)
-        .get()
-        .then(d => { return d.data() })
+    onLoggedIn () {
+    
     },
-    async onHeaderRight () {
-      this.headerContent.rightAction = {
-        label: '保存',
-        color: '#999',
-        method: () => {}
-      }
+    onHeaderRight () {
 
-      if (this.owner.bank.bankName === '' ||
-          this.owner.bank.branchName === '' ||
-          this.owner.bank.accountType === '' ||
-          this.owner.bank.accountNumber === '' ||
-          this.owner.bank.accountName === '' ||
-          this.owner.shopName === '' ||
-          this.owner.shopComment === '') {
-        alert("必要項目を入力してください。")
-        this.headerContent.rightAction = {
-          label: '保存',
-          color: '#1967d2',
-          method: this.onHeaderRight
-        }
-        return true
-      }
-
-      await db.collection("OWNERS")
-        .doc(this.uid)
-        .update({
-          shopIconPhoto: this.owner.shopIconPhoto,
-          shopHeaderPhoto: this.owner.shopHeaderPhoto,
-          shopName: this.owner.shopName,
-          shopComment: this.owner.shopComment,
-          bank: this.owner.bank,
-          shopPlanComments: this.owner.shopPlanComments
-        })
-
-      this.headerContent.rightAction = {
-        label: '保存',
-        color: '#1967d2',
-        method: this.onHeaderRight
-      }
-
-      alert("保存されました。")
-      this.$router.push("/home")
     }
   }
 }

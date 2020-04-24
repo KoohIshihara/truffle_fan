@@ -11,37 +11,36 @@
         v-icon(color="#fff" size="18px").mr6 share
         span.line-clamp-1 シェア
     div.wrap-profile-texts.px12.py20.mb20
-      div.wrap-text-item.mb12
-        span.label.mb4 お店の名前:
-        span {{owner.shopName}}
-      div.wrap-text-item.mb12
-        span.label.mb4 コメント:
-        span {{owner.shopComment}}
-      div(v-if="owner.shopPlanComments[0].value").wrap-text-item.mb12
-        span.label.mb4 月額5,000円プラン:
-        span {{owner.shopPlanComments[0].value + ' '}}
-      div(v-if="owner.shopPlanComments[1].value").wrap-text-item.mb12
-        span.label.mb4 月額10,000円プラン:
-        span {{owner.shopPlanComments[1].value + ' '}}
-      div(v-if="owner.shopPlanComments[2].value").wrap-text-item.mb12
-        span.label.mb4 月額20,000円プラン:
-        span {{owner.shopPlanComments[2].value + ' '}}
-      div.wrap-text-item.mb12
-        span.label.mb4 銀行名:
-        span {{owner.bank.bankName}}
-      div.wrap-text-item.mb12
-        span.label.mb4 支店名:
-        span {{owner.bank.branchName}}
-      div.wrap-text-item.mb12
-        span.label.mb4 口座種別:
-        span {{owner.bank.accountType}}
-      div.wrap-text-item.mb12
-        span.label.mb4 口座番号:
-        span {{owner.bank.accountNumber}}
-      div.wrap-text-item.mb12
-        span.label.mb4 口座名義（カナ）:
-        span {{owner.bank.accountName}}
-    
+      div.wrap-shop-content.mb40
+        div.wrap-text-item.mb12
+          span.label.mb4 お店の名前:
+          span {{owner.shopName}}
+        div.wrap-text-item.mb12
+          span.label.mb4 コメント:
+          span {{owner.shopComment}}
+      div.wrap-plan.mb40
+        div(v-if="owner.planType==='unit'").wrap-text-item.mb12
+          span.label.mb4 プラン:
+          span 一口1,000円の2割引券
+        div(v-if="owner.planType==='fanClub'").wrap-text-item.mb12
+          span.label.mb4 プラン:
+          span {{`${priceLabel}で「${owner.fanClubDetail.content}」`}}
+      div.wrap-bank-info
+        div.wrap-text-item.mb12
+          span.label.mb4 銀行名:
+          span {{owner.bank.bankName}}
+        div.wrap-text-item.mb12
+          span.label.mb4 支店名:
+          span {{owner.bank.branchName}}
+        div.wrap-text-item.mb12
+          span.label.mb4 口座種別:
+          span {{owner.bank.accountType}}
+        div.wrap-text-item.mb12
+          span.label.mb4 口座番号:
+          span {{owner.bank.accountNumber}}
+        div.wrap-text-item.mb12
+          span.label.mb4 口座名義（カナ）:
+          span {{owner.bank.accountName}} 
     div.wrap-sign-out.f.fc
       span(@click="logout") ログアウト
 </template>
@@ -148,13 +147,29 @@ export default {
           color: "#1967d2",
           method: this.onHeaderRight
         }
-      }
+      },
+      priceLabel: ''
     }
   },
   computed: {
     ...mapStateAuth(['uid']),
     copyMessage: function () {
       return `${location.origin}/${this.owner.uid}`
+    }
+  },
+  created () {
+    if (this.owner.planType === 'fanClub') {
+      switch (this.owner.fanClubDetail.plan) {
+        case 'FIVE_THOUSAND_YEN_PLAN':
+          this.priceLabel = '5,000円'
+          break
+        case 'FIVE_THOUSAND_YEN_PLAN':
+          this.priceLabel = '10,000円'
+          break
+        case 'TWENTY_THOUSAND_YEN_PLAN':
+          this.priceLabel = '20,000円'
+          break
+      }
     }
   },
   methods: {
