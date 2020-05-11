@@ -41,17 +41,19 @@ export default {
     }
   },
   computed: {
-    ...mapStateAuth(['uid'])
+    ...mapStateAuth(['uid', 'isAnonymous'])
   },
   methods: {
     onFailedAuthentication () {
       this.$router.push('/sign-in')
     },
     async onLoggedIn () {
+      if (this.isAnonymous) this.$router.push('/sign-in')
+
       this.owner = await db.collection('OWNERS')
         .doc(this.uid).get().then(d => { return d.data() })
       
-      if (!this.owner.planType) {
+      if (this.owner && !this.owner.planType) {
         this.$router.push('/settings/plan_type')
         return
       }

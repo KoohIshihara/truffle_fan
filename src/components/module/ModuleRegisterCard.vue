@@ -91,6 +91,10 @@ export default {
         this.plan = 'TEN_THOUSAND_YEN_PLAN'
         this.planLabel = '月額10,000円プラン'
         break
+      case 'FIF_TEEN_THOUSAND_YEN_PLAN':
+        this.plan = 'FIF_TEEN_THOUSAND_YEN_PLAN'
+        this.planLabel = '月額15,000円プラン'
+        break
       case 'TWENTY_THOUSAND_YEN_PLAN':
         this.plan = 'TWENTY_THOUSAND_YEN_PLAN'
         this.planLabel = '月額20,000円プラン'
@@ -174,7 +178,11 @@ export default {
           'Accept': 'application/json'
         },
         body: JSON.stringify(params)
+      }).catch((reason) => {
+        alert('購入に失敗しました。')
+        this.isSaving = false
       })
+
       await response.json()
 
       this.updateEmail(this.email)

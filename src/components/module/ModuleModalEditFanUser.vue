@@ -32,11 +32,14 @@
           v-model="user.email")
         div.wrap-button.f.fc
           span(@click="onRetrySendEmail").px12.py8 もう一度送信
+    div(v-if="isSaving").wrap-now-saving.f.fh
+      v-progress-circular(color="primary" indeterminate)
 
 </template>
 
 <style lang="scss" scoped>
 .wrap-module-edit-fan-user {
+  position: relative;
   min-width: 280px;
   border-radius: 3px;
   background: #fff;
@@ -57,6 +60,15 @@
       color: #1967d2;
       font-size: 12px;
     }
+  }
+  .wrap-now-saving {
+    z-index: 1001;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
   }
 }
 </style>
@@ -99,6 +111,7 @@ export default {
       if (this.user.name === '' ||
           this.user.phoneNumber === '') {
         alert('必要項目を入力してください。')
+        this.isSaving = false
         return false
       }
 

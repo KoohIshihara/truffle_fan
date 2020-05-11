@@ -24,21 +24,21 @@ const membershipPlans = [
     id: FIVE_THOUSAND_YEN_PLAN,
     interval: MONTH,
     product: RESTAURANT_SUBSCRIPTION,
-    amount: 5000,
+    amount: 5500,
     usage_type: 'licensed'
   },
   {
     id: TEN_THOUSAND_YEN_PLAN,
     interval: MONTH,
     product: RESTAURANT_SUBSCRIPTION,
-    amount: 10000,
+    amount: 11000,
     usage_type: 'licensed'
   },
   {
     id: TWENTY_THOUSAND_YEN_PLAN,
     interval: MONTH,
     product: RESTAURANT_SUBSCRIPTION,
-    amount: 20000,
+    amount: 22000,
     usage_type: 'licensed'
   }
 ]

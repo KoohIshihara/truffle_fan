@@ -10,10 +10,21 @@
             span.example.pl32 Ex.月額10,000円で12口をサブスク
           div
             v-radio(label='月額定額のファンクラブ' value='fanClub')
-            div.pl32
+            //- div.pl32
               v-select(:items='prices' v-model='price')
               v-text-field(placeholder='特典の説明を入力' v-model='fanClubDetail')
               span.example Ex.月額5,000円で来店時にコーヒー1杯無料
+            div
+              ItemSettingsFanClubPlanList(
+                v-for='content in fanClubList'
+                :content='content'
+                @removeMenu='removeMenu')
+              div.f.flex-right.mt12.mb10
+                div(@click='addPlanMenu').add-plan-menu.f.fm
+                  v-icon(color='blue') add
+                  span ファンクラブのメニューを追加
+              div.pl32
+                span.example Ex.月額5,000円で来店時にコーヒー1杯無料
 </template>
 
 <style lang="scss" scoped>
@@ -24,6 +35,13 @@
     .example {
       font-size: 14px;
       color: #999;
+    }
+    .add-plan-menu {
+      cursor: pointer;
+      span {
+        font-size: 14px;
+        color: #1967d2;
+      }
     }
   }
 }
@@ -50,9 +68,11 @@
 import db from '@/components/utils/firebase'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState: mapStateAuth, mapActions: mapActionsAuth } = createNamespacedHelpers('auth')
+import ItemSettingsFanClubPlanList from '@/components/item/ItemSettingsFanClubPlanList'
 
 export default {
   components: {
+    ItemSettingsFanClubPlanList
   },
   props: {
     owner: {
@@ -71,29 +91,52 @@ export default {
       prices: [
         '5,000円',
         '10,000円',
+        '15,000円',
         '20,000円'
+      ],
+      fanClubList: [
+        {
+          plan: 'FIVE_THOUSAND_YEN_PLAN',
+          detail: ''
+        }
       ]
     }
   },
   created () {
     if (this.owner.planType === 'fanClub') {
       this.planType = 'fanClub'
-      switch (this.owner.fanClubDetail.plan) {
-        case 'FIVE_THOUSAND_YEN_PLAN':
-          this.price = '5,000円'
-          break
-        case 'TEN_THOUSAND_YEN_PLAN':
-          this.price = '10,000円'
-          break
-        case 'TWENTY_THOUSAND_YEN_PLAN':
-          this.price = '20,000円'
-          break
-      }
-      this.fanClubDetail = this.owner.fanClubDetail.content
+      if (this.owner.fanClubList) this.fanClubList = this.owner.fanClubList
+
+      // switch (this.owner.fanClubDetail.plan) {
+      //   case 'FIVE_THOUSAND_YEN_PLAN':
+      //     this.price = '5,000円'
+      //     break
+      //   case 'TEN_THOUSAND_YEN_PLAN':
+      //     this.price = '10,000円'
+      //     break
+      //   case 'FIF_TEEN_THOUSAND_YEN_PLAN':
+      //     this.price = '15,000円'
+      //     break
+      //   case 'TWENTY_THOUSAND_YEN_PLAN':
+      //     this.price = '20,000円'
+      //     break
+      // }
+      // this.fanClubDetail = this.owner.fanClubDetail.content
     }
   },
   methods: {
-    ...mapActionsAuth(['signOut'])
+    ...mapActionsAuth(['signOut']),
+    addPlanMenu () {
+      this.fanClubList.push({
+        plan: 'FIVE_THOUSAND_YEN_PLAN',
+        detail: ''
+      })
+    },
+    removeMenu (content) {
+      this.fanClubList = this.fanClubList.filter(e => {
+        return !(e.price === content.price && e.detail === content.detail)
+      })
+    }
   }
 }
 </script>

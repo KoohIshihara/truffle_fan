@@ -14,16 +14,16 @@ import 'firebase/auth'
 // }
 
 // Prod
-// const config = {
-//   apiKey: 'AIzaSyBHmMs1jbWcDNCy4BByX37azJBEFrny7aw',
-//   authDomain: 'restaurant-subscription-prod.firebaseapp.com',
-//   databaseURL: 'https://restaurant-subscription-prod.firebaseio.com',
-//   projectId: 'restaurant-subscription-prod',
-//   storageBucket: 'restaurant-subscription-prod.appspot.com',
-//   messagingSenderId: '310783782226'
-// }
-// const stripeKey = 'pk_live_ap7LjEiAjKrgZrUgZef2GfM600eq6xrzbi'
-// const api = 'https://us-central1-restaurant-subscription-prod.cloudfunctions.net'
+const config = {
+  apiKey: 'AIzaSyBHmMs1jbWcDNCy4BByX37azJBEFrny7aw',
+  authDomain: 'restaurant-subscription-prod.firebaseapp.com',
+  databaseURL: 'https://restaurant-subscription-prod.firebaseio.com',
+  projectId: 'restaurant-subscription-prod',
+  storageBucket: 'restaurant-subscription-prod.appspot.com',
+  messagingSenderId: '310783782226'
+}
+const stripeKey = 'pk_live_ap7LjEiAjKrgZrUgZef2GfM600eq6xrzbi'
+const api = 'https://us-central1-restaurant-subscription-prod.cloudfunctions.net'
 
 // Craft Beer
 // const config = {
@@ -38,16 +38,16 @@ import 'firebase/auth'
 // const api = 'https://us-central1-craftbeer-truffle-fan.cloudfunctions.net'
 
 // Dev
-const config = {
-  apiKey: 'AIzaSyDrUcZQXk4uHJxWPf1gQDcAfLJh1vrblb8',
-  authDomain: 'restaurant-subscription-dev.firebaseapp.com',
-  databaseURL: 'https://restaurant-subscription-dev.firebaseio.com',
-  projectId: 'restaurant-subscription-dev',
-  storageBucket: 'restaurant-subscription-dev.appspot.com',
-  messagingSenderId: '413090111870'
-}
-const stripeKey = 'pk_test_1psNbfMG1VXdfb8XlP3a7Zdb00vquL8lhg'
-const api = 'https://us-central1-restaurant-subscription-dev.cloudfunctions.net'
+// const config = {
+//   apiKey: 'AIzaSyDrUcZQXk4uHJxWPf1gQDcAfLJh1vrblb8',
+//   authDomain: 'restaurant-subscription-dev.firebaseapp.com',
+//   databaseURL: 'https://restaurant-subscription-dev.firebaseio.com',
+//   projectId: 'restaurant-subscription-dev',
+//   storageBucket: 'restaurant-subscription-dev.appspot.com',
+//   messagingSenderId: '413090111870'
+// }
+// const stripeKey = 'pk_test_1psNbfMG1VXdfb8XlP3a7Zdb00vquL8lhg'
+// const api = 'https://us-central1-restaurant-subscription-dev.cloudfunctions.net'
 // const api = 'http://localhost:5000/restaurant-subscription-dev/us-central1'
 
 const firebaseApp = firebase.initializeApp(config)

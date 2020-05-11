@@ -18,7 +18,7 @@ exports.createSubscription = functions.https.onRequest((req, res) => {
   res.set('Access-Control-Allow-Headers', 'Content-Type')
   cors(req, res, async () => {
     await createSubscription(req.body.email, req.body.token, req.body.uid, req.body.ownerId, req.body.plan)
-    // console.log("req.body.ownerId", req.body.ownerId)
+    console.log("req.body.ownerId", req.body.ownerId)
     var owner = await db.collection('OWNERS').doc(req.body.ownerId).get().then(d => { return d.data() })
     var ownerEmail = await db.collection('OWNERS')
       .doc(req.body.ownerId)
@@ -34,20 +34,20 @@ exports.createSubscription = functions.https.onRequest((req, res) => {
     var price
     switch (req.body.plan) {
       case FIVE_THOUSAND_YEN_PLAN:
-        price = '5,000'
+        price = '5,500'
         break
       case TEN_THOUSAND_YEN_PLAN:
-        price = '10,000'
+        price = '11,000'
         break
       case TWENTY_THOUSAND_YEN_PLAN:
-        price = '20,000'
+        price = '22,000'
         break
     }
 
     var title = `[Truffle.fan] ${owner.shopName} サブスクリプションのご購入が完了しました。`
     var text = `
 店舗名：${owner.shopName}
-金額：月額${price}円
+金額：月額${price}円 (税込み)
 
 会員証はこちら
 ${domain}fan_users/${req.body.ownerId}/${req.body.uid}
@@ -66,16 +66,22 @@ ${domain}fan_users/${req.body.ownerId}/${req.body.uid}
     if (req.body.inviterId) {
       var inviterEmail = await db.collection('FAN_USERS')
         .doc(req.body.inviterId)
+        .collection('SECRETS')
+        .doc('email')
         .get()
         .then(d => {
-          var data = d.data()
-          return data.email
+          if (d.exists) {
+            var data = d.data()
+            return data.email
+          } else {
+            return ''
+          }
         })
-      text += `招待者のメールアドレス：${inviterEmail}`
+      if (inviterEmail) text += `招待者のメールアドレス：${inviterEmail}`
     }
 
     text += `
-金額：月額${price}円
+金額：月額${price}円 (税込み)
 
 お客様の会員証はこちら
 ${domain}fan_users/${req.body.ownerId}/${req.body.uid}

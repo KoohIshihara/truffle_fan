@@ -21,9 +21,15 @@
               div.plan-detail.mb2
                 span.plan-detail.pl32 {{price.detail}}
         div(v-if="owner.planType === 'fanClub'").mb20
-          div.f.fc.mb8
+          v-radio-group(v-model="selectedPlan")
+            div(v-for="item in owner.fanClubList").mb6
+              v-radio(
+                :key="item.plan"
+                :label="getPriceLabel(item.plan) + '(税抜き) ' + item.detail"
+                :value="item.plan").mb8
+          //- div.f.fc.mb8
             span.bold {{`${priceLabel}`}}
-          span {{`${owner.fanClubDetail.content}`}}
+          //- span {{`${owner.fanClubDetail.content}`}}
       div.wrap-button.f.fc.mb30
         span(@click="onSubscription").px12.py8 サブスクする
       div.wrap-share.f.fc
@@ -170,6 +176,11 @@ export default {
           detail: '1,000円割引券を12枚分(2,000円お得)'
         },
         {
+          label: '月額15,000円(税抜)',
+          plan: 'FIF_TEEN_THOUSAND_YEN_PLAN',
+          detail: '1,000円割引券を18枚分(3,000円お得)'
+        },
+        {
           label: '月額20,000円(税抜)',
           plan: 'TWENTY_THOUSAND_YEN_PLAN',
           detail: '1,000円割引券を24枚分(4,000円お得)'
@@ -191,18 +202,19 @@ export default {
   },
   created () {
     if (this.owner.planType === 'fanClub') {
-      this.selectedPlan = this.owner.fanClubDetail.plan
-      switch (this.owner.fanClubDetail.plan) {
-        case 'FIVE_THOUSAND_YEN_PLAN':
-          this.priceLabel = '月額5,000円'
-          break
-        case 'TEN_THOUSAND_YEN_PLAN':
-          this.priceLabel = '月額10,000円'
-          break
-        case 'TWENTY_THOUSAND_YEN_PLAN':
-          this.priceLabel = '月額20,000円'
-          break
-      }
+      // this.selectedPlan = this.owner.fanClubDetail.plan
+      // switch (this.owner.fanClubDetail.plan) {
+      //   case 'FIVE_THOUSAND_YEN_PLAN':
+      //     this.priceLabel = '月額5,000円(税抜)'
+      //     break
+      //   case 'TEN_THOUSAND_YEN_PLAN':
+      //     this.priceLabel = '月額10,000円(税抜)'
+      //     break
+      //   case 'TWENTY_THOUSAND_YEN_PLAN':
+      //     this.priceLabel = '月額20,000円(税抜)'
+      //     break
+      // }
+      this.selectedPlan = this.owner.fanClubList[0].plan
     }
   },
   methods: {
@@ -213,6 +225,23 @@ export default {
     onSubscription () {
       this.$emit("openModalWindow", "registerCard")
       // this.$emit("openModalWindow", "editFanUser")
+    },
+    getPriceLabel (plan) {
+      switch (plan) {
+        case 'FIVE_THOUSAND_YEN_PLAN':
+          var price = '5,000円'
+          break
+        case 'TEN_THOUSAND_YEN_PLAN':
+          var price = '10,000円'
+          break
+        case 'FIF_TEEN_THOUSAND_YEN_PLAN':
+          var price = '15,000円'
+          break
+        case 'TWENTY_THOUSAND_YEN_PLAN':
+          var price = '20,000円'
+          break
+      }
+      return price
     }
   }
 }

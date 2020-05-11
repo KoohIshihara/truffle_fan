@@ -24,6 +24,10 @@
           span 一口1,000円の2割引券
         div(v-if="owner.planType==='fanClub'").wrap-text-item.mb12
           span.label.mb4 プラン:
+          span(v-for='item in owner.fanClubList') {{`${getFunClubPlanMenuFormat(item)}`}}
+          //- span {{`${priceLabel}で「${owner.fanClubDetail.content}」`}}
+        //- div(v-if="owner.planType==='fanClub'").wrap-text-item.mb12
+          span.label.mb4 プラン:
           span {{`${priceLabel}で「${owner.fanClubDetail.content}」`}}
       div.wrap-bank-info
         div.wrap-text-item.mb12
@@ -147,8 +151,8 @@ export default {
           color: "#1967d2",
           method: this.onHeaderRight
         }
-      },
-      priceLabel: ''
+      }
+      // priceLabel: ''
     }
   },
   computed: {
@@ -158,19 +162,19 @@ export default {
     }
   },
   created () {
-    if (this.owner.planType === 'fanClub') {
-      switch (this.owner.fanClubDetail.plan) {
-        case 'FIVE_THOUSAND_YEN_PLAN':
-          this.priceLabel = '5,000円'
-          break
-        case 'FIVE_THOUSAND_YEN_PLAN':
-          this.priceLabel = '10,000円'
-          break
-        case 'TWENTY_THOUSAND_YEN_PLAN':
-          this.priceLabel = '20,000円'
-          break
-      }
-    }
+    // if (this.owner.planType === 'fanClub') {
+    //   switch (this.owner.fanClubDetail.plan) {
+    //     case 'FIVE_THOUSAND_YEN_PLAN':
+    //       this.priceLabel = '5,000円'
+    //       break
+    //     case 'TEN_THOUSAND_YEN_PLAN':
+    //       this.priceLabel = '10,000円'
+    //       break
+    //     case 'TWENTY_THOUSAND_YEN_PLAN':
+    //       this.priceLabel = '20,000円'
+    //       break
+    //   }
+    // }
   },
   methods: {
     ...mapActionsAuth(['signOut']),
@@ -188,6 +192,24 @@ export default {
     },
     onCopy () {
       alert(`リンクがコピーされました。${this.copyMessage}`)
+    },
+    getFunClubPlanMenuFormat (menu) {
+      var priceLabel
+      switch (menu.plan) {
+        case 'FIVE_THOUSAND_YEN_PLAN':
+          priceLabel = '5,000円'
+          break
+        case 'TEN_THOUSAND_YEN_PLAN':
+          priceLabel = '10,000円'
+          break
+        case 'FIF_TEEN_THOUSAND_YEN_PLAN':
+          priceLabel = '15,000円'
+          break
+        case 'TWENTY_THOUSAND_YEN_PLAN':
+          priceLabel = '20,000円'
+          break
+      }
+      return `${priceLabel}で「${menu.detail}」`
     }
   }
 }
