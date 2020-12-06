@@ -54,6 +54,12 @@ export default new Router({
         import('@/views/FanUser')
     },
     {
+      path: '/reset_profile/:resetProfileId',
+      name: 'reset_profile',
+      component: () =>
+        import('@/views/ResetProfile')
+    },
+    {
       path: '/sign-in',
       name: 'sign-in',
       props: true,

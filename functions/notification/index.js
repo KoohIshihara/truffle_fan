@@ -5,8 +5,11 @@ const nodemailer = require("nodemailer")
 const firebase = require("../firebase.js")
 const db = firebase.db
 
-const gmailEmail = "appsocially.common@gmail.com"
-const gmailPassword = "chatcenter"
+// const gmailEmail = "appsocially.common@gmail.com"
+// const gmailPassword = "chatcenter"
+
+const gmailEmail = "truffletechnologies@gmail.com"
+const gmailPassword = "3rlarDjs"
 
 // 送信に使用するメールサーバーの設定
 const mailTransport = nodemailer.createTransport({
@@ -36,5 +39,7 @@ var sendNotification = async (email, subject, text) => {
     return console.log("send success.")
   })
 }
+
+// sendNotification('ko.ishihara@chatcenter.io', 'title', 'body')
 
 module.exports = sendNotification

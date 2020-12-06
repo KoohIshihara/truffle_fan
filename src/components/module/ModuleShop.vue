@@ -1,42 +1,43 @@
 <template lang="pug">
-  div.wrap-module-shop
-    div.wrap-profile-img.f.fh.mb20
-      div.wrap-icon-img
-        img(:src="owner.shopIconPhoto")
-      div.wrap-header-img
-        img(:src="owner.shopHeaderPhoto")
-    div.wrap-shop-content
-      div.wrap-title.f.fc.mb8
-        span {{owner.shopName}}
-      div.wrap-comment.f.fc.mb14
-        span {{owner.shopComment}}
-      div.wrap-plan.f.fc
-        div(v-if="owner.planType === 'unit'").mb12
-          v-radio-group(v-model="selectedPlan")
-            div(v-for="(price, index) in prices").mb6
-              v-radio(
-                :key="price.plan"
-                :label="price.label"
-                :value="price.plan")
-              div.plan-detail.mb2
-                span.plan-detail.pl32 {{price.detail}}
-        div(v-if="owner.planType === 'fanClub'").mb20
-          v-radio-group(v-model="selectedPlan")
-            div(v-for="item in owner.fanClubList").mb6
-              v-radio(
-                :key="item.plan"
-                :label="getPriceLabel(item.plan) + '(税抜き) ' + item.detail"
-                :value="item.plan").mb8
-          //- div.f.fc.mb8
-            span.bold {{`${priceLabel}`}}
-          //- span {{`${owner.fanClubDetail.content}`}}
-      div.wrap-button.f.fc.mb30
-        span(@click="onSubscription").px12.py8 サブスクする
-      div.wrap-share.f.fc
-        div(v-clipboard:copy="copyMessage"
-          v-clipboard:success="onCopy").share-button.f.fm.px12.py8
-          v-icon(color="#1967d2" size="18px").mr6 share
-          span.line-clamp-1 友達に教える
+.wrap-module-shop
+  .wrap-profile-img.f.fh.mb20
+    .wrap-icon-img
+      img(:src="owner.shopIconPhoto")
+    .wrap-header-img
+      img(:src="owner.shopHeaderPhoto")
+  .wrap-shop-content
+    .wrap-title.f.fc.mb8
+      span {{ owner.shopName }}
+    .wrap-comment.f.fc.mb14
+      span {{ owner.shopComment }}
+    .wrap-plan.f.fc
+      div.mb12(v-if="owner.planType === 'unit'")
+        v-radio-group(v-model="selectedPlan")
+          div.mb6(v-for="(price, index) in prices")
+            v-radio(
+              :key="price.plan",
+              :label="price.label",
+              :value="price.plan"
+            )
+            .plan-detail.mb2
+              span.plan-detail.pl32 {{ price.detail }}
+      div.mb20(v-if="owner.planType === 'fanClub'")
+        v-radio-group(v-model="selectedPlan")
+          div.mb6(v-for="item in owner.fanClubList")
+            v-radio.mb8(
+              :key="item.plan",
+              :label="getPriceLabel(item.plan) + '(税抜き) ' + item.detail",
+              :value="item.plan"
+            )
+        //- div.f.fc.mb8
+          span.bold {{`${priceLabel}`}}
+        //- span {{`${owner.fanClubDetail.content}`}}
+    .wrap-button.f.fc.mb30
+      span.px12.py8(@click="onSubscription") サブスクする
+    .wrap-share.f.fc
+      div.share-button.f.fm.px12.py8(v-clipboard:copy="copyMessage", v-clipboard:success="onCopy")
+        v-icon.mr6(color="#1967d2", size="18px") share
+        span.line-clamp-1 友達に教える
 </template>
 
 <style lang="scss" scoped>

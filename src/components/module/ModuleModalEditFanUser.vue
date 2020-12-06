@@ -22,7 +22,7 @@
         span(@click="onSave").px12.py8 保存
     div(v-else).wrap-after-send.py20
       div.f.fc.mb20
-        span 確認メールを送信しました。
+        span メールをご確認ください。
       div(v-if="!showRetryEmail").f.fc
         span(@click="() => { showRetryEmail = true }").cannot-reach メールが届かない場合
       div(v-if="showRetryEmail").wrap-retry-send-email
@@ -114,8 +114,9 @@ export default {
         this.isSaving = false
         return false
       }
-
-      var ref = db.collection('FAN_USERS').doc(this.uid)
+      var uid = (this.$route.name === 'fan_users') ? this.$route.params.fanUserId : this.uid
+      
+      var ref = db.collection('FAN_USERS').doc(uid)
       await ref.update({
         name: this.user.name,
         iconPhoto: this.user.iconPhoto,
@@ -126,7 +127,7 @@ export default {
       await ref.collection('SECRETS').doc('phone_number').set({
         ownerId: this.$route.params.ownerId,
         body: this.user.phoneNumber,
-        createdBy: this.uid
+        createdBy: uid
       })
 
       const response = await fetch(`${api}/sendEmailVerification`, {
@@ -138,7 +139,7 @@ export default {
         },
         body: JSON.stringify({
           email: this.email,
-          uid: this.uid,
+          uid: uid,
           ownerId: this.$route.params.ownerId
         })
       })
@@ -151,9 +152,9 @@ export default {
     },
     async onRetrySendEmail () {
       this.updateEmail(this.user.email)
-
+      var uid = (this.$route.name === 'fan_users') ? this.$route.params.fanUserId : this.uid
       await db.collection('FAN_USERS')
-        .doc(this.uid)
+        .doc(uid)
         .collection('SECRETS')
         .doc('email')
         .update({
@@ -169,7 +170,7 @@ export default {
         },
         body: JSON.stringify({
           email: this.email,
-          uid: this.uid,
+          uid: uid,
           ownerId: this.$route.params.ownerId
         })
       })

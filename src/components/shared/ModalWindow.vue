@@ -15,6 +15,9 @@
         ModuleModalCompleteVerification(
           v-if="modalContentId === 'completeVerification'"
           @closeModal="() => { $emit('closeModal') }")
+        ModulePleaseContact(
+          v-if="modalContentId === 'pleaseContact'"
+          @closeModal="() => { $emit('closeModal') }")
 </template>
 
 <style lang="scss" scoped>
@@ -45,6 +48,7 @@
 import ModuleRegisterCard from '@/components/module/ModuleRegisterCard'
 import ModuleModalCompleteSubscription from '@/components/module/ModuleModalCompleteSubscription'
 import ModuleModalEditFanUser from '@/components/module/ModuleModalEditFanUser'
+import ModulePleaseContact from '@/components/module/ModulePleaseContact'
 
 import ModuleModalCompleteVerification from '@/components/module/ModuleModalCompleteVerification'
 
@@ -53,6 +57,7 @@ export default {
     ModuleRegisterCard,
     ModuleModalCompleteSubscription,
     ModuleModalEditFanUser,
+    ModulePleaseContact,
     ModuleModalCompleteVerification
   },
   props: {

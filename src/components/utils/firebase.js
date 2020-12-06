@@ -13,6 +13,14 @@ import 'firebase/auth'
 //   messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGINGSENDERID
 // }
 
+/*
+デプロイチェックリスト
+1. configのprodとdevあってるか
+2. ターミナルでターゲットプロジェクトをprodとdev間違えていないか
+3. セキュリティルールの更新はprodにもしたか
+4. cloud functionsの起動元allUsersに許可したか
+*/
+
 // Prod
 const config = {
   apiKey: 'AIzaSyBHmMs1jbWcDNCy4BByX37azJBEFrny7aw',

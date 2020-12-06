@@ -152,6 +152,55 @@ exports.verifyEmail = functions.https.onRequest((req, res) => {
   }) // cors
 })
 
+exports.sendEmailToEditProfile = functions.https.onRequest((req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
+  res.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, POST')
+  res.set('Access-Control-Allow-Headers', 'Content-Type')
+  cors(req, res, async () => {
+    console.log("uid", req.body.uid)
+
+    var resetPath = await db.collection('RESET_PROFILE_PATH').add({
+      createdBy: req.body.uid,
+      createdAt: new Date()
+    }).then((d) => {
+      return d.id
+    })
+
+    var email = await db.collection('FAN_USERS')
+      .doc(req.body.uid)
+      .collection('SECRETS')
+      .doc('email')
+      .get()
+      .then(d => {
+        return d.data().body
+      })
+    var title = '[Truffle.fan] 会員証プロフィールの再設定'
+    var text = `
+こちらから会員証プロフィールを再設定してください。
+${domain}reset_profile/${resetPath}
+
+提供元：Truffle Technologies KK
+お問い合わせ：hello@truffletechnologies.co.jp
+    `
+    sendNotification(email, title, text)
+
+    // await db.collection('FAN_USERS').doc(req.body.uid).update({ updated: new Date() })
+
+    res.status(200).send({ result: 'succeed' }).end()
+  }) // cors
+})
+
+exports.updateUpdatedAt = functions.https.onRequest((req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
+  res.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, POST')
+  res.set('Access-Control-Allow-Headers', 'Content-Type')
+  cors(req, res, async () => {
+    console.log("uid", req.body.uid)
+    await db.collection('FAN_USERS').doc(req.body.uid).update({ updatedAt: new Date() })
+    res.status(200).send({ result: 'succeed' }).end()
+  }) // cors
+})
+
 // exports.sendNotification = functions.https.onRequest((req, res) => {
 //   res.set('Access-Control-Allow-Origin', '*')
 //   res.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, POST')

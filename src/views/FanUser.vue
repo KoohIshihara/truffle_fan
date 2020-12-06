@@ -21,6 +21,10 @@
 import db, { api } from '@/components/utils/firebase'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState: mapStateAuth, mapActions: mapActionsAuth } = createNamespacedHelpers('auth')
+import format from 'date-fns/format'
+import isBefore from 'date-fns/isBefore'
+import addHours from 'date-fns/addHours'
+
 import Auth from '@/components/auth'
 import Header from '@/components/shared/Header.vue'
 import ModuleFanUser from '@/components/module/ModuleFanUser'
@@ -61,6 +65,18 @@ export default {
         return d.data()
       })
 
+    // updatedAtは/fan_users/:ownerId/:fanUserId/:resetProfileIdを踏んだ時に更新される
+    // もしくは/reset_profile/:resetProfileIdを踏んだ時に更新される
+    var letEdit = isBefore(new Date(), addHours(this.user.createdAt.toDate(), 3))
+                  || (this.user.updatedAt && isBefore(new Date(), addHours(this.user.updatedAt.toDate(), 3)))
+    if (!this.user.name || !this.user.iconPhoto) {
+      if (letEdit) {
+        this.openModalWindow('editFanUser')
+      } else {
+        this.openModalWindow('pleaseContact')
+      }
+    }
+
     this.headerContent.label = this.user.name
 
     if (this.$route.name === 'verify_email' && this.user) {
@@ -80,11 +96,15 @@ export default {
     }
   },
   methods: {
-    onFailedAuthentication () {
-      // this.$router.push('/sign-in')
+    ...mapActionsAuth([
+      'signInAnonymously',
+      'signOut'
+    ]),
+    async onFailedAuthentication () {
+      await this.signInAnonymously()
     },
     onLoggedIn () {
-    
+      
     },
     openModalWindow (id) {
       this.modalWindowContentId = id
